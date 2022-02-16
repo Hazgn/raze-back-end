@@ -20,13 +20,13 @@ const register = async (req, res) => {
                 email,
             },
         });
-        console.log(result);
         if (result !== null)
             return response(res, {
                 status: 400,
                 message: "email sudah terdaftar",
             });
         const body = req.body;
+        console.log(body);
         body.password = await bcrypt.hash(password, 10);
         await model.users.create(body);
         return response(res, {
