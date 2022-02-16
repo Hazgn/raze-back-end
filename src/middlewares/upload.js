@@ -29,7 +29,7 @@ let obj = {
     fileFilter: fileFilter
 };
 
-const upload = multer(obj).single('image'); // upload.single('file')
+const upload = multer(obj).any('image'); // upload.single('file')
 exports.fileUpload = async (req, res, next) => {
     await upload(req, res, function (error) {
         if (error) { //instanceof multer.MulterError

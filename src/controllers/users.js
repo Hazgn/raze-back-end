@@ -35,13 +35,14 @@ const userById = (req, res) => {
 };
 const editUser = async (req, res) => {
   const { id } = req.userInfo;
-  const image = req.file?.filename
-        ? `${process.env.IMAGE_HOST}${req.file.filename}`
-        : null;
+  
     const body = req.body;
     const {email}=req.body
 
-    if(image !== null){
+    if(req.files===[]){
+        const image = req.files[0].filename
+        ? `${process.env.IMAGE_HOST}${req.files[0].filename}`
+        : null;
         body.image = image;
       }
   console.log(req.userInfo);
