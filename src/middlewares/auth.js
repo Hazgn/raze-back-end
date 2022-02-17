@@ -1,9 +1,12 @@
 
 const jwt = require("jsonwebtoken")
-// const db = require('../config/db');
+const model = require("../models/index");
+const response = require("../helper/response");
 
-const checkToken = (req, res, next) => {
+const checkToken = async(req, res, next) => {
   const token = req.header('x-access-token')
+  const checkWhiteList= await model.white_list_tokens.findOne({where:{token}})
+  if (checkWhiteList) { return response(res, { status: 403, message: "you already logout" }); }
   // const sqlGetBlackList = `SELECT token FROM white_list_token WHERE token = ?`
   // db.query(sqlGetBlackList, [token], (err, result) => {
   //   if (err) return res.status(500).json({ err })

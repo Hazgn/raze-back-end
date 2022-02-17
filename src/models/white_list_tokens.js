@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class users extends Model {
+  class white_list_tokens extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,19 +13,11 @@ module.exports = (sequelize, DataTypes) => {
     //   // define association here
     // }
   }
-  users.init({
-    username: DataTypes.STRING,
-    email: DataTypes.STRING,
-    role: DataTypes.STRING,
-    gender: DataTypes.STRING,
-    password: DataTypes.STRING,
-    store_name: DataTypes.STRING,
-    store_description: DataTypes.STRING,
-    image: DataTypes.STRING,
-    key_reset_pass:DataTypes.INTEGER,
+  white_list_tokens.init({
+    token: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'users',
+    modelName: 'white_list_tokens',
   });
-  return users;
+  return white_list_tokens;
 };

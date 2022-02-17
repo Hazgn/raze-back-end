@@ -2,6 +2,8 @@ const model = require("../models/index");
 const  response  = require("../helper/response");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const dayjs = require("dayjs");
+const { sendForgotPass } = require("../helper/sendForgotPass");
 // const dayjs = require("dayjs");
 // const { sendForgotPass } = require("../helper/sendForgotPass");
 
@@ -74,7 +76,7 @@ const login = async (req, res) => {
         return response(res, {
             data: token,
             status: 200,
-            massage: "login success",
+            message: "login success",
         });
         // httpResponse(res, await services.createUser(req.body));
     } catch (error) {
@@ -86,4 +88,87 @@ const login = async (req, res) => {
     }
 }
 
-module.exports = { register, login,}
+const logout = async (req, res) => {
+    const token = req.header("x-access-token");
+    try {
+        const result = await model.white_list_tokens.create({token})
+        return response(res, {
+            data: result,
+            status: 200,
+            message: "loggout success",
+        });
+    } catch (error) {
+        return response(res, {
+            status: 500,
+            message: "Password atau Email Salah",
+            error,
+        });
+    }
+}
+
+const forgotPassword = async (req, res) =>{
+    const {email,linkUrl} = req.body;
+
+    try {
+        const data = await model.users.findOne({
+            where: { email },
+        });
+        if (data === null) {
+            return response(res, {
+                status: 404,
+                message: "Email tidak ada",
+            });
+        }
+        const generatePass = dayjs().format('YYmmssDD');
+        // const password = await bcrypt.hash(generatePass, 10);
+        const update = await data.update({ key_reset_pass:generatePass });
+        // {display_name:"trisumanzaya"}
+        
+        await sendForgotPass(email, {username:update.username,linkUrl, generatePass})
+        // kirim new password ke email
+        return response(res, {
+            status: 200,
+            message: "email send",
+        });
+        // httpResponse(res, await services.createUser(req.body));
+    } catch (error) {
+        return response(res, {
+            status: 500,
+            message: "Terjadi Error",
+            error,
+        });
+    }
+}
+
+const resetPassword = async (req, res) =>{
+    const {key_reset_pass,newPassword,confirmPassword}= req.body
+    console.log(key_reset_pass);
+    try {
+        const data = await model.users.findOne({
+            where: { key_reset_pass },
+        });
+        if (data === null) {
+            return response(res, {
+                status: 404,
+                message: "please reapet step forgot password",
+            });
+        }
+        if(newPassword!==confirmPassword){return response(res,{status:400,message:"password tidak sama"})}
+        const password = await bcrypt.hash(newPassword, 10);
+        // const password = await bcrypt.hash(generatePass, 10);
+        const update = await data.update({ password });
+        return response(res, {
+            data: update,
+            status: 200,
+            message: "reset password succes",
+        });
+    } catch (error) {
+        return response(res, {
+            status: 500,
+            message: "Terjadi Error",
+            error,
+        });
+    }
+}
+
+module.exports = { register, login,logout,forgotPassword,resetPassword}
