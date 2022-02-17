@@ -9,7 +9,7 @@ productRouter
     .post('/createproduct',checkToken,checkRoleAdmin,fileUpload,productController.createProduct)
     .patch('/:productId',checkToken,checkRoleAdmin,fileUpload,productController.updateProduct)
     .get('/:productId', productController.getProductById)
-    // .get('/',  productController.getAllProduct)
+    .get('/',  productController.getAllProduct)
     .delete('/:productId',checkToken,checkRoleAdmin,  productController.deleteById)
 
 
