@@ -1,5 +1,7 @@
 const model = require("../models/index");
 const response = require("../helper/response");
+const { Op } = require("sequelize");
+const pagination = require("../helper/pagination");
 
 const createProduct = async (req, res) => {
   const { id } = req.userInfo;
@@ -53,23 +55,68 @@ const createProduct = async (req, res) => {
   }
 };
 
+const getAllProduct = async (req, res) => {
+  const { per_page, page, search, category } = req.query;
+  console.log(req.query);
 
-const getAllProduct= async (req, res) => {
+  let { sortBy, sort } = req.query;
+  const where = {};
+  const whereOr = [];
+  const limit = parseInt(per_page ?? 10);
+  const offset = parseInt((page ?? 1) * limit) - limit;
+
+  if (search) {
+    whereOr.push(
+      {
+        name: {
+          [Op.like]: `%${search}%`,
+        },
+      },
+      {
+        color: {
+          [Op.like]: `%${search}%`,
+        },
+      },
+      {
+        brand: {
+          [Op.like]: `%${search}%`,
+        },
+      }
+    );
+  }
+  console.log("apa",search);
+  if (category) {
+    if (category === "favorite") {
+      sortBy = "popular_score";
+      sort = "DESC";
+    } else {
+      where.category = category;
+    }
+  }
+  if (whereOr.length !== 0) where[Op.or] = whereOr;
+  console.log("dimanaaa",where);
   try {
-    const result = await model.products.findAll({
+    const result = await model.products.findAndCountAll({
+      where,
       include: [
         {
           model: model.image_products,
           as: "image",
         },
       ],
+      limit: limit,
+      offset: offset,
+      order: [[sortBy ?? 'createdAt', sort ?? 'DESC']]
     });
-    return response(res, {
-      data: result,
+    return pagination(res, req, {
+      data: result.rows,
+      total: result.count,
       status: 200,
-      message: "get product by id succes",
+      massage: "get product succes",
+      limit,
+      offset,
+      query: req.query,
     });
-    
   } catch (error) {
     return response(res, {
       status: 500,
@@ -77,9 +124,7 @@ const getAllProduct= async (req, res) => {
       error,
     });
   }
-
-}
-
+};
 
 const getProductById = async (req, res) => {
   const { productId } = req.params;
@@ -169,7 +214,7 @@ const updateProduct = async (req, res) => {
 };
 
 const deleteById = async (req, res) => {
-  const {id} = req.userInfo
+  const { id } = req.userInfo;
   const { productId } = req.params;
   try {
     const cekId = await model.products.findOne({
@@ -205,4 +250,10 @@ const deleteById = async (req, res) => {
   }
 };
 
-module.exports = { createProduct, getProductById, updateProduct, deleteById, getAllProduct };
+module.exports = {
+  createProduct,
+  getProductById,
+  updateProduct,
+  deleteById,
+  getAllProduct,
+};

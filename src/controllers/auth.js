@@ -156,7 +156,7 @@ const resetPassword = async (req, res) =>{
         if(newPassword!==confirmPassword){return response(res,{status:400,message:"password tidak sama"})}
         const password = await bcrypt.hash(newPassword, 10);
         // const password = await bcrypt.hash(generatePass, 10);
-        const update = await data.update({ password });
+        const update = await data.update({ password, key_reset_pass:null });
         return response(res, {
             data: update,
             status: 200,
