@@ -250,10 +250,30 @@ const deleteById = async (req, res) => {
   }
 };
 
+const getProductBySeller = async (req, res) => {
+  const {id} = req.userInfo
+ try {
+   const result = await model.products.findAll({where:{user_id:id}})
+  return response(res, {
+    data: result,
+    status: 200,
+    message: "get product by seller succes",
+  });
+ } catch (error) {
+  return response(res, {
+    status: 500,
+    message: "Terjadi Error",
+    error,
+  });
+ }
+
+}
+
 module.exports = {
   createProduct,
   getProductById,
   updateProduct,
   deleteById,
   getAllProduct,
+  getProductBySeller
 };
