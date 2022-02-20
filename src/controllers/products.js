@@ -84,7 +84,7 @@ const getAllProduct = async (req, res) => {
       }
     );
   }
-  console.log("apa",search);
+  console.log("apa", search);
   if (category) {
     if (category === "favorite") {
       sortBy = "popular_score";
@@ -94,7 +94,7 @@ const getAllProduct = async (req, res) => {
     }
   }
   if (whereOr.length !== 0) where[Op.or] = whereOr;
-  console.log("dimanaaa",where);
+  console.log("dimanaaa", where);
   try {
     const result = await model.products.findAndCountAll({
       where,
@@ -106,7 +106,7 @@ const getAllProduct = async (req, res) => {
       ],
       limit: limit,
       offset: offset,
-      order: [[sortBy ?? 'createdAt', sort ?? 'DESC']]
+      order: [[sortBy ?? "createdAt", sort ?? "DESC"]],
     });
     return pagination(res, req, {
       data: result.rows,
@@ -251,23 +251,31 @@ const deleteById = async (req, res) => {
 };
 
 const getProductBySeller = async (req, res) => {
-  const {id} = req.userInfo
- try {
-   const result = await model.products.findAll({where:{user_id:id}})
-  return response(res, {
-    data: result,
-    status: 200,
-    message: "get product by seller succes",
-  });
- } catch (error) {
-  return response(res, {
-    status: 500,
-    message: "Terjadi Error",
-    error,
-  });
- }
-
-}
+  const { id } = req.userInfo;
+  try {
+    const result = await model.products.findAll({
+      where: { user_id: id },
+      include: [
+        {
+          model: model.image_products,
+          as: "image",
+          attributes: ["image"]
+        },
+      ],
+    });
+    return response(res, {
+      data: result,
+      status: 200,
+      message: "get product by seller succes",
+    });
+  } catch (error) {
+    return response(res, {
+      status: 500,
+      message: "Terjadi Error",
+      error,
+    });
+  }
+};
 
 module.exports = {
   createProduct,
@@ -275,5 +283,5 @@ module.exports = {
   updateProduct,
   deleteById,
   getAllProduct,
-  getProductBySeller
+  getProductBySeller,
 };

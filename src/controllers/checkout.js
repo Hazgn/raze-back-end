@@ -36,7 +36,7 @@ const createCheckout = async (req, res) => {
           const stock = cekStock.dataValues.stock;
           const updateStock = stock - item.quantity;
           console.log(updateStock);
-          if(updateStock<=0){
+          if(updateStock<0){
             return response(res, {
                 status: 400,
                 message: "silahkan cek stock kembali",
