@@ -33,9 +33,9 @@ const createCheckout = async (req, res) => {
         const cekStock = await model.products.findOne({
             where: { id: item.product_id },
           });
+          console.log(cekStock);
           const stock = cekStock.dataValues.stock;
           const updateStock = stock - item.quantity;
-          console.log(updateStock);
           if(updateStock<0){
             return response(res, {
                 status: 400,
@@ -126,7 +126,10 @@ const handleMidtrans = async (req, res) => {
   const { order_id, transaction_status } = req.body;
   try {
     const result = await model.checkouts.update(
-      { status_order: transaction_status },
+      { 
+        status_order: transaction_status,
+        shipping_status:"Process"
+       },
       { where: { payment_id: order_id } }
     );
     return response(res, {
@@ -142,5 +145,74 @@ const handleMidtrans = async (req, res) => {
     });
   }
 };
+const getCheckoutBySeller = async (req, res) => {
+  const {id}= req.userInfo
+  try {
+    const result = await model.checkouts.findAll({
+      
+      include: {
+        model: model.products,
+        as: "product",
+        attributes: ["name", "price"],
+        where: { user_id: id },
+        include: [
+          {
+            model: model.image_products,
+            as: "image",
+            attributes: ["image"],
+          },
+        ],
+      },
+    });
+    return response(res, {
+      data: result,
+      status: 200,
+      message: "get checkout by id succes",
+    });
+  } catch (error) {
+    return response(res, {
+      status: 500,
+      message: "Terjadi Error",
+      error,
+    });
+  }
+}
 
-module.exports = { createCheckout, getCheckoutByUserId, handleMidtrans };
+const updateCheckout = async (req, res) => {
+  const { checkoutId } = req.params;
+  const body = req.body
+  console.log(body);
+  try {
+    await model.checkouts.update(body,{where:{id:checkoutId}})
+    return response(res, {
+      status: 200,
+      message: "update checkout by seller succes",
+    });
+  } catch (error) {
+    return response(res, {
+      status: 500,
+      message: "Terjadi Error",
+      error,
+    });
+  }
+}
+
+const getOrderTracking = async (req,res) =>{
+  const {  search } = req.body;
+  try {
+    const result = await model.checkouts.findOne({where:{order_id:search}})
+    return response(res, {
+      data : result,
+      status: 200,
+      message: "update checkout by seller succes",
+    });
+  } catch (error) {
+    return response(res, {
+      status: 500,
+      message: "Terjadi Error",
+      error,
+    });
+  }
+}
+
+module.exports = { createCheckout, getCheckoutByUserId, handleMidtrans,getCheckoutBySeller,updateCheckout,getOrderTracking };
