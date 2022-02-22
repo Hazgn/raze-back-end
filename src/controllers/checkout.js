@@ -198,9 +198,10 @@ const updateCheckout = async (req, res) => {
 }
 
 const getOrderTracking = async (req,res) =>{
-  const {  search } = req.body;
+  const {  tracking } = req.params;
+  console.log(tracking);
   try {
-    const result = await model.checkouts.findOne({where:{order_id:search}})
+    const result = await model.checkouts.findOne({where:{order_id:tracking}})
     return response(res, {
       data : result,
       status: 200,
