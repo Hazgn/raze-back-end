@@ -5,7 +5,7 @@ const response = require("../helper/response");
 
 const checkToken = async(req, res, next) => {
   const token = req.header('x-access-token')
-  console.log('tokenfahrul',token)
+  console.log(typeof token)
   if (token===undefined) { return response(res, { status: 403, message: "token undefined" }); }
   const checkWhiteList= await model.white_list_tokens.findOne({where:{token}})
   if (checkWhiteList) { return response(res, { status: 403, message: "you already logout" }); }

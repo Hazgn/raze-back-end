@@ -9,7 +9,7 @@ checkoutRouter
     .get("/",checkToken,checkoutController.getCheckoutByUserId)
     .get("/checkoutseller",checkToken,checkoutController.getCheckoutBySeller)
     .patch("/:checkoutId",checkToken,checkoutController.updateCheckout)
-    .get("/ordertracking",checkoutController.getOrderTracking)
+    .get("/ordertracking",checkToken,checkoutController.getOrderTracking)
     // .get("/", checkToken,cartController.getCartByUserId) 
     // .get("/cartcount",checkToken,cartController.getCartCountByUserId)
     // .patch("/:cartId", checkToken,cartController.updateCart)
