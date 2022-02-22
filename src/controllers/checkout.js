@@ -208,6 +208,7 @@ const getOrderTracking = async (req,res) =>{
       message: "update checkout by seller succes",
     });
   } catch (error) {
+    console.log(error);
     return response(res, {
       status: 500,
       message: "Terjadi Error",
