@@ -14,6 +14,7 @@ const userById = (req, res) => {
         "gender",
         "image",
         "store_name",
+        "role",
         "store_description",
         "createdAt",
         "updatedAt",

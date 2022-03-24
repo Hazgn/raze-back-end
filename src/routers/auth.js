@@ -6,6 +6,7 @@ const { register, login } = require('./../middlewares/validate')
 
 authRouter.post('/signup', register, authController.register)
 authRouter.post('/forgotpassword', authController.forgotPassword)
+authRouter.post('/contactus', authController.contactUs)
 authRouter.post('/login', login, authController.login)
 authRouter.post('/logout', authController.logout)
 authRouter.post('/resetpassword', authController.resetPassword)

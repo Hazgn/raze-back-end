@@ -56,7 +56,7 @@ const createProduct = async (req, res) => {
 };
 
 const getAllProduct = async (req, res) => {
-  const { per_page, page, search, category } = req.query;
+  const { per_page, page, search, category,min,max } = req.query;
   console.log(req.query);
 
   let { sortBy, sort } = req.query;
@@ -83,6 +83,11 @@ const getAllProduct = async (req, res) => {
         },
       }
     );
+  }
+  if(min && max){
+      where.price= {
+        [Op.between]: [min,max]
+      }
   }
   console.log("apa", search);
   if (category) {
@@ -112,7 +117,7 @@ const getAllProduct = async (req, res) => {
       data: result.rows,
       total: result.count,
       status: 200,
-      massage: "get product succes",
+      message: "get product succes",
       limit,
       offset,
       query: req.query,

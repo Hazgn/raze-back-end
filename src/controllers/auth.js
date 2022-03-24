@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const dayjs = require("dayjs");
 const { sendForgotPass } = require("../helper/sendForgotPass");
+const { sendContactUs } = require("../helper/sendContactUs");
 // const dayjs = require("dayjs");
 // const { sendForgotPass } = require("../helper/sendForgotPass");
 
@@ -139,6 +140,28 @@ const forgotPassword = async (req, res) =>{
         });
     }
 }
+const contactUs = async (req, res) =>{
+    const body = req.body;
+    console.log(body);
+
+    try {
+        
+        await sendContactUs(body)
+        // kirim new password ke email
+        return response(res, {
+            status: 200,
+            message: "email send",
+            // body
+        });
+        // httpResponse(res, await services.createUser(req.body));
+    } catch (error) {
+        return response(res, {
+            status: 500,
+            message: "Terjadi Error",
+            error,
+        });
+    }
+}
 
 const resetPassword = async (req, res) =>{
     const {key_reset_pass,newPassword,confirmPassword}= req.body
@@ -171,4 +194,4 @@ const resetPassword = async (req, res) =>{
     }
 }
 
-module.exports = { register, login,logout,forgotPassword,resetPassword}
+module.exports = { register, login,logout,forgotPassword,resetPassword,contactUs}
