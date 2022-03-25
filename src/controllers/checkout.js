@@ -122,6 +122,26 @@ const getCheckoutByUserId = async (req, res) => {
   }
 };
 
+const getCheckoutById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await model.checkouts.findOne({
+      where: { id: id },
+    });
+    return response(res, {
+      data: result,
+      status: 200,
+      message: "get checkout by id succes",
+    });
+  } catch (error) {
+    return response(res, {
+      status: 500,
+      message: "Terjadi Error",
+      error,
+    });
+  }
+};
+
 const handleMidtrans = async (req, res) => {
   const { order_id, transaction_status } = req.body;
   try {
@@ -217,4 +237,4 @@ const getOrderTracking = async (req,res) =>{
   }
 }
 
-module.exports = { createCheckout, getCheckoutByUserId, handleMidtrans,getCheckoutBySeller,updateCheckout,getOrderTracking };
+module.exports = { createCheckout, getCheckoutByUserId, handleMidtrans,getCheckoutBySeller,updateCheckout,getOrderTracking,getCheckoutById };

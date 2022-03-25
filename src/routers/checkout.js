@@ -6,6 +6,7 @@ const {checkToken} = require('../middlewares/auth')
 checkoutRouter
     .post('/createcheckout',checkToken,checkoutController.createCheckout)
     .post('/handlemidtrans',checkoutController.handleMidtrans)
+    .get("/checkoutbyid/:id",checkToken,checkoutController.getCheckoutById)
     .get("/",checkToken,checkoutController.getCheckoutByUserId)
     .get("/checkoutseller",checkToken,checkoutController.getCheckoutBySeller)
     .patch("/:checkoutId",checkToken,checkoutController.updateCheckout)

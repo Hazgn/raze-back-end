@@ -3,7 +3,7 @@
 <br/>
 
 <div align="center">
-	<img height="200" src="./assets/icon.png" alt="RAZZ">
+	<img height="200" src="./assets/icon1.png" alt="RAZZ">
 
 [![express](https://img.shields.io/npm/v/express?label=express)](https://www.npmjs.com/package/express)
 [![sequelize](https://img.shields.io/npm/v/sequelize?label=sequelize)](https://www.npmjs.com/package/sequelize)
