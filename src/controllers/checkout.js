@@ -219,13 +219,30 @@ const updateCheckout = async (req, res) => {
 
 const getOrderTracking = async (req,res) =>{
   const {  tracking } = req.params;
-  console.log(tracking);
   try {
-    const result = await model.checkouts.findOne({where:{order_id:tracking}})
+    const result = await model.checkouts.findOne({
+      include: {
+        model: model.products,
+        as: "product",
+        include: [
+          {
+            model: model.image_products,
+            as: "image",
+            attributes: ["image"],
+          },
+        ],
+      },
+      where:{order_id:tracking},
+  })
+    // if(result===null) return response(res,{status:404,message:"order id not found"})
+    // const product_id=result.dataValues.product_id
+    // const productItem = await model.products.findOne({where:{id:product_id}})
+
+
     return response(res, {
-      data : result,
+      data : {order:result},
       status: 200,
-      message: "update checkout by seller succes",
+      message: "get order tracker ",
     });
   } catch (error) {
     console.log(error);
