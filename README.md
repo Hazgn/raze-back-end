@@ -1,9 +1,9 @@
-# RAZZ E-Commerce - Backend
+# RAZ E-Commerce - Backend
 
 <br/>
 
 <div align="center">
-	<img height="200" src="./assets/icon1.png" alt="RAZZ">
+	<img height="200" src="./assets/icon1.png" alt="RAZ">
 
 [![express](https://img.shields.io/npm/v/express?label=express)](https://www.npmjs.com/package/express)
 [![sequelize](https://img.shields.io/npm/v/sequelize?label=sequelize)](https://www.npmjs.com/package/sequelize)
@@ -22,7 +22,7 @@
 
 <br/>
 
-Razz E-Commerce is a platform for buying and selling various products, where this platform can make it easier for customers and sellers to transact with each other
+Raz E-Commerce is a platform for buying and selling various products, where this platform can make it easier for customers and sellers to transact with each other
 
 ## Contents
 
@@ -84,7 +84,7 @@ You may also see any lint errors in the console.
 
 ## Related Projects
 
-`RAZZ E-COMMERCE  - Frontend` <https://github.com/fahrul-muhammad/raz-front-end>
+`RAZ E-COMMERCE  - Frontend` <https://github.com/fahrul-muhammad/raz-front-end>
 
 ## Contributors
 
